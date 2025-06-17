@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { saveScore } from '../services/api';
 
@@ -37,13 +37,15 @@ export default function GameScreen({ route, navigation }) {
 
   const handleAnswer = async (answer) => {
     const correct = questions[currentIndex].correct_answer;
+    const isCorrect = answer === correct;
 
-    if (answer === correct) {
-      setScore(score + 1);
+    if (isCorrect) {
+      setScore((prev) => prev + 1);
     } else {
-      const remainingHearts = hearts - 1;
-      setHearts(remainingHearts);
-      if (remainingHearts === 0) {
+      const updatedHearts = hearts - 1;
+      setHearts(updatedHearts);
+
+      if (updatedHearts <= 0) {
         await saveScore(name, score, 3);
         navigation.replace('Lose', { name, score });
         return;
@@ -51,11 +53,13 @@ export default function GameScreen({ route, navigation }) {
     }
 
     const nextIndex = currentIndex + 1;
+
     if (nextIndex < questions.length) {
       setCurrentIndex(nextIndex);
     } else {
-      await saveScore(name, score, 3 - hearts);
-      navigation.replace('Win', { name, score });
+      const finalScore = isCorrect ? score + 1 : score;
+      await saveScore(name, finalScore, 3 - hearts);
+      navigation.replace('Win', { name, score: finalScore });
     }
   };
 
@@ -88,7 +92,7 @@ export default function GameScreen({ route, navigation }) {
         </TouchableOpacity>
       ))}
 
-      <Text style={styles.progress}>Pergunta {currentIndex + 1} de 10</Text>
+      <Text style={styles.progress}>Pergunta {currentIndex + 1} de {questions.length}</Text>
     </View>
   );
 }

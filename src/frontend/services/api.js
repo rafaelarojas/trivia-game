@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND = 'http://10.254.18.22:8000'; 
+const BACKEND = 'http://10.150.1.61:8000'; 
 
 export const fetchQuestions = async () => {
   try {
