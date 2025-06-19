@@ -4,7 +4,7 @@ const BACKEND = 'http://10.150.1.61:8000';
 
 export const fetchQuestions = async () => {
   try {
-    const res = await axios.get('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple');
+    const res = await axios.get('https://opentdb.com/api.php?amount=10&category=31&difficulty=easy');
     return res.data.results;
   } catch (error) {
     console.error('Erro ao buscar perguntas:', error.message);

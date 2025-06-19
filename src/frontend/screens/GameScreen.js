@@ -27,7 +27,7 @@ export default function GameScreen({ route, navigation }) {
 
   const fetchQuestions = async () => {
     try {
-      const res = await axios.get('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple');
+      const res = await axios.get('https://opentdb.com/api.php?amount=10&category=31&difficulty=easy');
       setQuestions(res.data.results);
       setLoading(false);
     } catch (error) {
